@@ -67,13 +67,7 @@
       },
       async search() {
         try {
-          const res = await axios.get('http://localhost:3000/events');
-          const animeData = res.data;
-          const searchResults = animeData.filter(anime =>
-            anime.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-          console.log("Карточка аниме", this.searchQuery)
-          this.$router.push({ name: 'anime', props: { searchQuery: [] } });
+          this.$router.push({ name: 'anime', query: { searchQuery: this.searchQuery } });
         } catch (error) {
           console.error('Ошибка при выполнении поиска:', error);
         }

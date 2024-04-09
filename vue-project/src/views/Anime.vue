@@ -1,6 +1,6 @@
 <template>
   <section>
-    <!-- <div class="container justify-content mt-3 mx-auto mb-5">
+    <div class="container justify-content mt-3 mx-auto mb-5">
       <div class="container-xxl pt-2">
         <div class="row">
           <div class="col-xl-10 col-md-9">
@@ -9,7 +9,8 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
+
     <div class="container justify-content mt-3 mx-auto mb-5">
       <div class="container-xxl pt-2">
         <div class="row">
@@ -90,16 +91,11 @@
   import Card from "../components/Card.vue"
   export default {
     name: "Anime",
-    props: {
-      searchQuery: {
-        type: Array,
-
-      },
-    },
-    data: function (){
+    data: function () {
       return{
         filteredArray: [],
-        sortBy: ''
+        sortBy: '',
+        searchResults: [],
       }
     },
     components:{
@@ -112,6 +108,7 @@
           this.APIResponse = res.data;
           this.APIResponse.sort((a, b) => b.id - a.id);
           this.filteredArray = res.data;
+          console.log("asd", this.filteredArray)
         }catch (error){
           console.log("error", error)
         }
@@ -131,7 +128,6 @@
             console.log("API data error")
           }
         }
-        console.log(this.filteredArray)
       },
       async checkSort(event){
         this.sortBy = event.target.value;
@@ -163,12 +159,23 @@
         } catch (error) {
           console.error("Ошибка при установке рейтинга:", error);
         }
+      },
+      async searchResult() {
+        try {
+          this.searchQuery = this.$route.query.searchQuery
+          this.searchResults = []
+          const res = await axios.get('http://localhost:3000/events');
+          const animeData = res.data;
+          this.searchResults = animeData.filter(anime => anime.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        } catch (error) {
+          console.error("error", error);
+        }
       }
     },
     mounted() {
-      console.log('searchQuery:', this.searchQuery);
       this.APIData()
       this.checkSort()
+      this.searchResult()
     }
   }
 </script>
