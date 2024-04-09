@@ -92,7 +92,7 @@
     name: "Anime",
     props: {
       searchQuery: {
-        type: String,
+        type: Array,
 
       },
     },
